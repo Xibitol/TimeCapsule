@@ -16,12 +16,14 @@ import java.util.function.Supplier;
 public class TimeCapsule extends Game{
 
 	private static final String IDENTIFIER = "timecapsule";
+	private LevelLayout layout;
 
 	public TimeCapsule(){
 		super();
 
 		setTitle(getI18n().getSentence("game.title", getVersion()));
 		setMainMenu(new Scene("MainMenu"));
+		this.layout = new LevelLayout();
 		setFirstLeftScene(this.createPastScenes());
 		setFirstRightScene(this.createFutureScenes());
 	}
@@ -31,14 +33,12 @@ public class TimeCapsule extends Game{
 	public String getIdentifier(){ return IDENTIFIER; }
 
 	public Scene createPastScenes(){
-		Scene pastScene = new Scene("Past");
-
 		GameObject pastGameObject1 = new GameObject("PastGameObject");
 		// Define a function that returns a Boolean on whether the trigger condition is met
 		Supplier<Boolean> PressedE = () -> KeyListener.isKeyPressed(GLFW_KEY_E);
 		Trigger trigger = new Trigger(1.0f, PressedE);
 		pastGameObject1.addComponent(trigger);
-		pastScene.addGameObject(pastGameObject1);
+		//pastScene.addGameObject(pastGameObject1);
 
 
 		GameObject pastGameObject2 = new GameObject("PastGameObject2");
@@ -53,20 +53,35 @@ public class TimeCapsule extends Game{
 		Triggerable triggerable = new Triggerable(triggerAction);
 
 		pastGameObject2.addComponent(triggerable);
-		pastScene.addGameObject(pastGameObject2);
+		//pastScene.addGameObject(pastGameObject2);
 
 		trigger.addTriggerable(triggerable);
 
+		layout.addPastScene(new Scene("PastChild1"));
+		layout.addPastScene(new Scene("PastChild2"));
+		layout.addPastScene(new Scene("PastChild3"));
+		layout.getPastScene().getChild("PastChild3").addChild(
+						new Scene("PastChild3Child1"));
+/*
 		pastScene.addChild(new Scene("PastChild1"));
 		pastScene.addChild(new Scene("PastChild2"));
 		pastScene.addChild(new Scene("PastChild3"));
 		Scene pastChild4 = new Scene("PastChild4");
 		pastScene.addChild(pastChild4);
 		pastChild4.addChild(new Scene("PastChild4Child1"));
-		return pastScene;
+*/
+		return layout.getPastScene();
 	}
 
 	public Scene createFutureScenes() {
+
+		layout.addFutureScene(new Scene("FutureChild1"));
+		layout.addFutureScene(new Scene("FutureChild2"));
+		layout.addFutureScene(new Scene("FutureChild3"));
+		layout.getFutureScene().getChild("FutureChild3").addChild(
+				new Scene("FutureChild3Child1")
+		);
+		/*
 		Scene future = new Scene("Future");
 		future.addChild(new Scene("FutureChild1"));
 		future.addChild(new Scene("FutureChild2"));
@@ -74,6 +89,15 @@ public class TimeCapsule extends Game{
 		Scene futureChild4 = new Scene("FutureChild4");
 		future.addChild(futureChild4);
 		futureChild4.addChild(new Scene("FutureChild4Child1"));
-		return future;
+*/
+		GameObject fGameObject1 = new GameObject("PastGameObject");
+		// Define a function that returns a Boolean on whether the trigger condition is met
+		Supplier<Boolean> PressedE = () -> KeyListener.isKeyPressed(GLFW_KEY_E);
+		Trigger trigger = new Trigger(1.0f, PressedE);
+		fGameObject1.addComponent(trigger);
+		//future.addGameObject(fGameObject1);
+
+
+		return layout.getFutureScene();
 	}
 }
