@@ -5,10 +5,7 @@ import static org.lwjgl.glfw.GLFW.*;
 import games.temporalstudio.temporalengine.Game;
 import games.temporalstudio.temporalengine.LifeCycleContext;
 import games.temporalstudio.temporalengine.Scene;
-import games.temporalstudio.temporalengine.component.GameObject;
-import games.temporalstudio.temporalengine.component.Input;
-import games.temporalstudio.temporalengine.component.Trigger;
-import games.temporalstudio.temporalengine.component.Triggerable;
+import games.temporalstudio.temporalengine.component.*;
 import games.temporalstudio.temporalengine.listeners.KeyListener;
 import games.temporalstudio.temporalengine.physics.*;
 import games.temporalstudio.temporalengine.physics.shapes.AABB;
@@ -169,11 +166,38 @@ public class TimeCapsule extends Game{
 			physicsBody.applyForce(new Vector2f(100.0f, 0.0f));
 		});
 
+		MouseAction mouseAction = new MouseAction();
+		mouseAction.setOnEnterAction((context) -> {
+			Game.LOGGER.info("Mouse enter player");
+		});
+		mouseAction.setOnExitAction((context) -> {
+			Game.LOGGER.info("Mouse exit player");
+		});
+		mouseAction.setOnHoverAction((context) -> {
+			Game.LOGGER.info("Mouse hover player");
+		});
+		mouseAction.setOnClickDownAction(new Consumer[]{
+				(context) -> { Game.LOGGER.info("Mouse click down 0 on player"); }, // button 0
+				(context) -> { Game.LOGGER.info("Mouse click down 1 on player"); }, // button 1
+				(context) -> { Game.LOGGER.info("Mouse click down 2 on player"); },// button 2
+		});
+		mouseAction.setOnClickAction(new Consumer[]{
+				(context) -> { Game.LOGGER.info("Mouse click 0 on player"); }, // button 0
+				(context) -> { Game.LOGGER.info("Mouse click 1 on player"); }, // button 1
+				(context) -> { Game.LOGGER.info("Mouse click 2 on player"); },// button 2
+		});
+		mouseAction.setOnClickUpAction(new Consumer[]{
+				(context) -> { Game.LOGGER.info("Mouse click up 0 on player"); }, // button 0
+				(context) -> { Game.LOGGER.info("Mouse click up 1 on player"); }, // button 1
+				(context) -> { Game.LOGGER.info("Mouse click up 2 on player"); },// button 2
+		});
+
 		player.addComponent(transform);
 		player.addComponent(render);
 		player.addComponent(physicsBody);
 		player.addComponent(input);
 		player.addComponent(collider2D);
+		player.addComponent(mouseAction);
 
 		return player;
 	}
