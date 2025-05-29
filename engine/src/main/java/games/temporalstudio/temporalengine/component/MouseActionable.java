@@ -58,12 +58,7 @@ public class MouseActionable implements Component {
     }
 
     public MouseActionable() {
-        this.onEnterAction = null;
-        this.onHoverAction = null;
-        this.onExitAction = null;
-        this.onClickDownAction = new Consumer[3];
-        this.onClickAction = new Consumer[3];
-        this.onClickUpAction = new Consumer[3];
+        this(null, null, null, null, null, null);
     }
 
     public void setMouseOver(boolean isMouseOver) { this.isMouseOver = isMouseOver; }
@@ -86,37 +81,36 @@ public class MouseActionable implements Component {
 
     public void setOnClickUpAction(Consumer<LifeCycleContext> onClickUpAction, int button) { this.onClickUpAction[button] = onClickUpAction; }
 
+    private boolean hasAction(Consumer<LifeCycleContext> action) { return action != null; }
 
-    private boolean isActionNull(Consumer<LifeCycleContext> action) { return action == null; }
-
-    private boolean isActionNull(Consumer<LifeCycleContext>[] action, int index) { return action == null || action[index] == null; }
+    private boolean hasAction(Consumer<LifeCycleContext>[] action, int index) { return action != null && action[index] != null; }
 
     @Override
     public void update(LifeCycleContext context, float delta) {
         if (isMouseOver) {
             if (!wasMouseOver) {
-                if (!isActionNull(onEnterAction)) { onEnterAction.accept(context); }
+                if (hasAction(onEnterAction)) { onEnterAction.accept(context); }
                 wasMouseOver = true;
             }
 
             for (int i = 0; i < wasMouseDown.length; i++) {
                 if (MouseListener.mouseButtonDown(i)) {
                     if (!wasMouseDown[i]) {
-                        if (!isActionNull(onClickDownAction, i)) { onClickDownAction[i].accept(context); }
+                        if (hasAction(onClickDownAction, i)) { onClickDownAction[i].accept(context); }
                         wasMouseDown[i] = true;
                     }
-                    if (!isActionNull(onClickAction, i)) { onClickAction[i].accept(context); }
+                    if (hasAction(onClickAction, i)) { onClickAction[i].accept(context); }
                 }
             }
         }
         if (!isMouseOver && wasMouseOver) {
-            if (!isActionNull(onExitAction)) { onExitAction.accept(context); }
+            if (hasAction(onExitAction)) { onExitAction.accept(context); }
             wasMouseOver = false;
         }
         for (int i = 0; i < wasMouseDown.length; i++) {
             if (!MouseListener.mouseButtonDown(i)) {
                 if (wasMouseDown[i]) {
-                    if (!isActionNull(onClickUpAction, i)) { onClickUpAction[i].accept(context); }
+                    if (hasAction(onClickUpAction, i)) { onClickUpAction[i].accept(context); }
                     wasMouseDown[i] = false;
                 }
             }

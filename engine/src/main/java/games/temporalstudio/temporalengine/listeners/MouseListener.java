@@ -1,16 +1,14 @@
 package games.temporalstudio.temporalengine.listeners;
 
-import games.temporalstudio.temporalengine.component.GameObject;
-import games.temporalstudio.temporalengine.component.MouseActionable;
-import games.temporalstudio.temporalengine.physics.Collider2D;
-import games.temporalstudio.temporalengine.physics.Transform;
-import games.temporalstudio.temporalengine.physics.shapes.AABB;
+import games.temporalstudio.temporalengine.window.Window;
+import org.joml.Matrix4f;
 import org.joml.Vector2f;
+import org.joml.Vector4f;
 
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 
-public class MouseListener extends GameObject {
+public class MouseListener {
 	private static MouseListener instance;
 
 	private double scrollX, scrollY;
@@ -18,39 +16,13 @@ public class MouseListener extends GameObject {
 	private boolean[] mouseButtonPressed = new boolean[3];
 	private boolean isDragging;
 
-	private Transform transform;
-	private Collider2D collider2D;
-
 	private MouseListener(){
-        super("MouseListener");
         this.scrollX = 0;
 		this.scrollY = 0;
 		this.xPos = 0;
 		this.yPos = 0;
 		this.lastX = 0;
 		this.lastY = 0;
-
-		this.transform = new Transform(new Vector2f(Float.MIN_VALUE, Float.MIN_VALUE), new Vector2f(0.0f, 0.0f)); // TODO : This is a dummy transform, it will not be used for rendering.
-		this.collider2D = new Collider2D(transform);
-		this.collider2D.setShape(new AABB(transform));
-
-		this.collider2D.setOnIntersects((context, other) -> {
-			if (!(other instanceof GameObject gameObject)) { return; }
-			if (!(gameObject.hasComponent(MouseActionable.class))) { return; }
-
-			MouseActionable mouseActionable = gameObject.getComponent(MouseActionable.class);
-			mouseActionable.setMouseOver(true);
-		});
-		this.collider2D.setOnSeparates((context, other) -> {
-			if (!(other instanceof GameObject gameObject)) { return; }
-			if (!(gameObject.hasComponent(MouseActionable.class))) { return; }
-
-			MouseActionable mouseActionable = gameObject.getComponent(MouseActionable.class);
-			mouseActionable.setMouseOver(false);
-		});
-
-		this.addComponent(transform);
-		this.addComponent(collider2D);
 	}
 
 	public static MouseListener get(){
@@ -66,8 +38,6 @@ public class MouseListener extends GameObject {
 		get().xPos = xpos;
 		get().yPos = ypos;
 		get().isDragging = get().mouseButtonPressed[0] || get().mouseButtonPressed[1] || get().mouseButtonPressed[2];
-
-		get().transform.setPosition(new Vector2f((float) xpos, (float) ypos));
 	}
 
 	public static void mouseButtonCallback(long window, int button, int action, int mods){

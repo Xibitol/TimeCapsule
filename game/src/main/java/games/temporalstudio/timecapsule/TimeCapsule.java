@@ -7,6 +7,7 @@ import games.temporalstudio.temporalengine.LifeCycleContext;
 import games.temporalstudio.temporalengine.Scene;
 import games.temporalstudio.temporalengine.component.*;
 import games.temporalstudio.temporalengine.listeners.KeyListener;
+import games.temporalstudio.temporalengine.listeners.MouseListener;
 import games.temporalstudio.temporalengine.physics.*;
 import games.temporalstudio.temporalengine.physics.shapes.AABB;
 import games.temporalstudio.temporalengine.rendering.component.ColorRender;
@@ -117,6 +118,7 @@ public class TimeCapsule extends Game{
 		future.addGameObject(player);
 		future.addGameObject(button);
 		future.addGameObject(door);
+		future.addGameObject(new MouseActionner("MouseActionner"));
 
 		return future;
 	}
