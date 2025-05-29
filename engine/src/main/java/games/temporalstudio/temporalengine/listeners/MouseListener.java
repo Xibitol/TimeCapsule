@@ -1,10 +1,5 @@
 package games.temporalstudio.temporalengine.listeners;
 
-import games.temporalstudio.temporalengine.window.Window;
-import org.joml.Matrix4f;
-import org.joml.Vector2f;
-import org.joml.Vector4f;
-
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 

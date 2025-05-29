@@ -118,7 +118,7 @@ public class TimeCapsule extends Game{
 		future.addGameObject(player);
 		future.addGameObject(button);
 		future.addGameObject(door);
-		future.addGameObject(new MouseActionner("MouseActionner"));
+		future.addGameObject(new MouseActionner("MouseActionner", camera.getComponent(View.class)));
 
 		return future;
 	}

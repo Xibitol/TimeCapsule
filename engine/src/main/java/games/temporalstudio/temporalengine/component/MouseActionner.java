@@ -8,6 +8,7 @@ import games.temporalstudio.temporalengine.physics.Transform;
 import games.temporalstudio.temporalengine.physics.shapes.AABB;
 import games.temporalstudio.temporalengine.rendering.component.ColorRender;
 import games.temporalstudio.temporalengine.rendering.component.Render;
+import games.temporalstudio.temporalengine.rendering.component.View;
 import games.temporalstudio.temporalengine.window.Window;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
@@ -15,9 +16,11 @@ import org.joml.Vector4f;
 public class MouseActionner extends GameObject {
     private Transform transform;
     private Collider2D collider2D;
+    private View view;
 
-    public MouseActionner(String name) {
+    public MouseActionner(String name, View view) {
         super(name);
+        this.view = view;
 
         Render render = new ColorRender(new Vector4f(0f, 1, 0f, 1)); // TODO : This is a dummy render, it will not be used for rendering.
         this.transform = new Transform(new Vector2f(1), new Vector2f(0.0f)); // TODO : This is a dummy transform, it will not be used for rendering.
@@ -50,9 +53,11 @@ public class MouseActionner extends GameObject {
     public void update(LifeCycleContext context, float delta) {
         super.update(context, delta);
         this.transform.setPosition(
-                Window.screenToWorldCoord(
+                view.screenToWorldCoord(
                         new Vector2f(MouseListener.getX(), -MouseListener.getY())
                 )
         );
+        Game.LOGGER.info("MouseActionner position updated to: " + this.transform.getPosition());
+        Game.LOGGER.info("Mouse position: " + MouseListener.getX() + ", " + MouseListener.getY());
     }
 }

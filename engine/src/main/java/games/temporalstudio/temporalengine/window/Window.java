@@ -6,8 +6,6 @@ import static org.lwjgl.opengl.GL11C.*;
 
 import java.util.function.Consumer;
 
-import org.joml.Matrix4f;
-import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryUtil;
@@ -61,14 +59,6 @@ public class Window implements WindowLifeCycle{
 		return instance.height;
 	}
 
-	public static Vector2f screenToWorldCoord(Vector2f screenCoord) {
-		float x = (2.0f * screenCoord.x) / 640 - 1.0f;
-		float y = (-2.0f * screenCoord.y) / 360 - 1.0f;
-		return new Vector2f(x, -y);
-	}
-	public static Matrix4f getProjectionMatrix() {
-		return new Matrix4f().ortho2D(0, 640, 360, 0);
-	}
 	public void setTitle(String title){
 		if(!hasInstance())
 			throw new RuntimeException();
