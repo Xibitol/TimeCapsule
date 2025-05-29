@@ -17,7 +17,7 @@ import java.util.stream.Stream;
  * and click events.
  * @author Adnan FAIZE
  */
-public class MouseAction implements Component {
+public class MouseActionable implements Component {
     private Consumer<LifeCycleContext> onEnterAction;
     private Consumer<LifeCycleContext> onHoverAction;
     private Consumer<LifeCycleContext> onExitAction;
@@ -41,7 +41,7 @@ public class MouseAction implements Component {
      * @param onClickAction Actions to perform when the mouse button is clicked on the GameObject.
      * @param onClickUpAction Actions to perform when the mouse button is released on the GameObject.
      */
-    public MouseAction(
+    public MouseActionable(
         @Nullable Consumer<LifeCycleContext> onEnterAction,
         @Nullable Consumer<LifeCycleContext> onHoverAction,
         @Nullable Consumer<LifeCycleContext> onExitAction,
@@ -57,7 +57,7 @@ public class MouseAction implements Component {
         this.onClickUpAction = onClickUpAction != null ? onClickUpAction : new Consumer[3];
     }
 
-    public MouseAction() {
+    public MouseActionable() {
         this.onEnterAction = null;
         this.onHoverAction = null;
         this.onExitAction = null;

@@ -1,7 +1,7 @@
 package games.temporalstudio.temporalengine.listeners;
 
 import games.temporalstudio.temporalengine.component.GameObject;
-import games.temporalstudio.temporalengine.component.MouseAction;
+import games.temporalstudio.temporalengine.component.MouseActionable;
 import games.temporalstudio.temporalengine.physics.Collider2D;
 import games.temporalstudio.temporalengine.physics.Transform;
 import games.temporalstudio.temporalengine.physics.shapes.AABB;
@@ -36,17 +36,17 @@ public class MouseListener extends GameObject {
 
 		this.collider2D.setOnIntersects((context, other) -> {
 			if (!(other instanceof GameObject gameObject)) { return; }
-			if (!(gameObject.hasComponent(MouseAction.class))) { return; }
+			if (!(gameObject.hasComponent(MouseActionable.class))) { return; }
 
-			MouseAction mouseAction = gameObject.getComponent(MouseAction.class);
-			mouseAction.setMouseOver(true);
+			MouseActionable mouseActionable = gameObject.getComponent(MouseActionable.class);
+			mouseActionable.setMouseOver(true);
 		});
 		this.collider2D.setOnSeparates((context, other) -> {
 			if (!(other instanceof GameObject gameObject)) { return; }
-			if (!(gameObject.hasComponent(MouseAction.class))) { return; }
+			if (!(gameObject.hasComponent(MouseActionable.class))) { return; }
 
-			MouseAction mouseAction = gameObject.getComponent(MouseAction.class);
-			mouseAction.setMouseOver(false);
+			MouseActionable mouseActionable = gameObject.getComponent(MouseActionable.class);
+			mouseActionable.setMouseOver(false);
 		});
 
 		this.addComponent(transform);
