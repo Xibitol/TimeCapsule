@@ -9,15 +9,18 @@ import games.temporalstudio.temporalengine.listeners.KeyListener;
 import games.temporalstudio.temporalengine.physics.PhysicsEngine;
 import games.temporalstudio.temporalengine.rendering.Renderer;
 import games.temporalstudio.temporalengine.window.Window;
+import games.temporalstudio.temporalengine.window.WindowInfo;
 
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.Version;
 
 public abstract class Game extends App implements LifeCycleContext{
 	public static Logger LOGGER;
 
-	private Window window;
-	private Renderer renderer;
-	private PhysicsEngine physicsEngine;
+	private final Window window;
+	private final WindowInfo windowInfo;
+	private final Renderer renderer;
+	private final PhysicsEngine physicsEngine;
 
 	private Scene mainMenu;
 	private Scene leftScene;
@@ -27,29 +30,33 @@ public abstract class Game extends App implements LifeCycleContext{
 	private boolean transitioning = false;
 	private float transitionTime = 0.5f; // Time in seconds for transitions
 
-	public Game(String title){
-		this.window = new Window(this::update, title);
-		this.physicsEngine = new PhysicsEngine();
+	public Game(String title, @Nullable String iconPath){
+		this.window = new Window(this::update, title, iconPath);
+		this.windowInfo = new WindowInfo(window);
 		this.renderer = new Renderer();
+		this.physicsEngine = new PhysicsEngine();
+
 		LOGGER = this.getLogger();
 	}
 	public Game(){
-		this(null);
+		this(null, null);
 	}
 
+	// GETTERS
+	public WindowInfo getWindowInfo(){ return windowInfo; }
+
+	public Scene getMainMenu(){ return mainMenu; }
+	public Scene getLeftScene(){ return leftScene; }
+	public Scene getRightScene(){ return rightScene; }
+
+	public boolean isPaused(){ return paused; }
 
 	// SETTERS
 	public void setTitle(String title){
 		this.window.setTitle(title);
 	}
-
-	// GETTERS
-	public Scene getLeftScene() {
-		return leftScene;
-	}
-
-	public Scene getRightScene() {
-		return rightScene;
+	public void setIcon(String iconPath){
+		this.window.setIcon(iconPath);
 	}
 
 	// FUNCTIONS
@@ -61,10 +68,9 @@ public abstract class Game extends App implements LifeCycleContext{
 		window.start(this);
 
 		physicsEngine.init(this);
-		physicsEngine.start(this);
-
 		renderer.init(this);
 
+		physicsEngine.start(this);
 		renderer.start(this);
 
 		window.run(this);
@@ -75,37 +81,41 @@ public abstract class Game extends App implements LifeCycleContext{
 	}
 
 	public void update(float deltaTime){
-		if (deltaTime >= 0){
+		if(deltaTime >= 0){
 			if(transitioning){
 				transitionTime -= deltaTime;
-				if (transitionTime <= 0) {
+
+				if(transitionTime <= 0){
 					transitioning = false;
 					transitionTime = 0.5f; // Reset transition time
 				}
 			}else if(paused){
 				mainMenu.update(this, deltaTime);
-				if (KeyListener.isKeyPressed(GLFW_KEY_ESCAPE)) {
+
+				if(KeyListener.isKeyPressed(GLFW_KEY_ESCAPE)){
 					paused = false;
 					transitioning = true;
 					this.getLogger().info("Transitioning to game");
 				}
 			}else{
-				if (leftScene != null) {
+				if(leftScene != null){
 					leftScene.update(this, deltaTime);
 				}
-				if (rightScene != null) {
+				if(rightScene != null){
 					rightScene.update(this, deltaTime);
 				}
-				if (KeyListener.isKeyPressed(GLFW_KEY_ESCAPE)) {
+
+				physicsEngine.compute(this, deltaTime);
+
+				if (KeyListener.isKeyPressed(GLFW_KEY_ESCAPE)){
 					paused = true;
 					transitioning = true;
 					this.getLogger().info("Transitioning to main menu");
 				}
 			}
-		}
 
-		physicsEngine.compute(this, deltaTime);
-		renderer.render(this);
+			renderer.render(this);
+		}
 	}
 
 	public void changeLeftScene(String name){
