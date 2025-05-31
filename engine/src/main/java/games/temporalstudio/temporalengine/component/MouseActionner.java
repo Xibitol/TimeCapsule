@@ -43,17 +43,6 @@ public class MouseActionner extends GameObject {
         this.addComponent(collider2D);
     }
 
-    /**
-     * MouseActionner component for handling mouse events on a GameObject.
-     * This component allows you to detect when the mouse is over a GameObject
-     * and trigger actions accordingly.
-     *
-     * @param view The View component used to convert screen coordinates to world coordinates. (Camera View Component)
-     */
-    public MouseActionner(@NotNull View view) {
-        this(null, view);
-    }
-
     @Override
     public void start(LifeCycleContext context) {
         this.collider2D.setOnIntersects((ctx, other) -> {
