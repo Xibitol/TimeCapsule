@@ -40,16 +40,18 @@ public final class NIOUtils {
 				while (channel.read(buffer) != -1);
 			}
 		} else {
-			try (InputStream res = ClassLoader.getSystemResourceAsStream(resource);
-				 ReadableByteChannel channel = Channels.newChannel(res)) {
-				buffer = BufferUtils.createByteBuffer(bufferSize);
+			try (InputStream res = ClassLoader.getSystemResourceAsStream(resource)) {
+                assert res != null;
+                try (ReadableByteChannel channel = Channels.newChannel(res)) {
+                    buffer = BufferUtils.createByteBuffer(bufferSize);
 
-				while (true) {
-					int bytesRead = channel.read(buffer);
-					if (bytesRead == -1) { break; }
-					if (buffer.remaining() == 0) { buffer = resizeBuffer(buffer, buffer.capacity() * 2); }
-				}
-			}
+                    while (true) {
+                        int bytesRead = channel.read(buffer);
+                        if (bytesRead == -1) { break; }
+                        if (buffer.remaining() == 0) { buffer = resizeBuffer(buffer, buffer.capacity() * 2); }
+                    }
+                }
+            }
 		}
 
 		buffer.flip();

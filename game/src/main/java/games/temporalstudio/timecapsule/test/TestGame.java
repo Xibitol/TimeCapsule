@@ -5,15 +5,12 @@ import static org.lwjgl.glfw.GLFW.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import games.temporalstudio.temporalengine.component.*;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
 import games.temporalstudio.temporalengine.Game;
 import games.temporalstudio.temporalengine.Scene;
-import games.temporalstudio.temporalengine.component.GameObject;
-import games.temporalstudio.temporalengine.component.Input;
-import games.temporalstudio.temporalengine.component.Trigger;
-import games.temporalstudio.temporalengine.component.Triggerable;
 import games.temporalstudio.temporalengine.physics.Collider2D;
 import games.temporalstudio.temporalengine.physics.PhysicsBody;
 import games.temporalstudio.temporalengine.physics.Transform;
@@ -61,12 +58,15 @@ public class TestGame extends Game{
 			GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D,
 			GLFW_KEY_Q
 		});
+		player.addComponent(new MouseActionable());
+
 		GameObject rulietta = new GameObject("Rulietta");
 		GameObject compulsiveMerger = new GameObject("Adrien");
 
 		// Components
 		camera.addComponent(new Transform());
 		camera.addComponent(new View(.1f));
+		MouseActionner mouseActionner = new MouseActionner(camera.getComponent(View.class));
 
 		rulietta.addComponent(new Transform(
 		 	new Vector2f(1, 2), new Vector2f(.85f, .85f)
@@ -89,6 +89,7 @@ public class TestGame extends Game{
 		past.addGameObject(player);
 		past.addGameObject(compulsiveMerger);
 		past.addGameObject(rulietta);
+		past.addGameObject(mouseActionner);
 
 		return past;
 	}
