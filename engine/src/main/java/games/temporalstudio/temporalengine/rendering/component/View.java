@@ -37,16 +37,12 @@ public class View implements Component{
 	public Matrix4f getView(){ return new Matrix4f(view); }
 
 	public Vector2f screenToWorldCoord(Vector2f screenCoord) {
-		// Normalize Screen Coordinates
-		float x = (2.0f * screenCoord.x) / Window.getWidth() - 1.0f;
-		float y = ((2.0f * screenCoord.y) / Window.getHeight() - 1.0f) * -1.0f; // Invert Y axis
-		Vector4f ndcPos = new Vector4f(x, y, 0.0f, 1.0f); // z = 0 for 2D space
-		// Uproject to World Space
-		Matrix4f inverseVP = getProjection().mul(getView()).invert();
-		Vector4f worldPos = new Vector4f();
-		inverseVP.transform(ndcPos, worldPos);
-		// Convert to 2D World Position
-		return new Vector2f(worldPos.x, worldPos.y);
+		Matrix4f inversePV = getProjection().mul(getView()).invert();
+		float mouseX = (2.0f * screenCoord.x) / Window.getWidth() - 1.0f;
+		float mouseY = 1.0f - (2.0f * screenCoord.y) / Window.getHeight();
+		Vector4f pos = new Vector4f(mouseX, mouseY, 0.0f, 1.0f); // z = 0 for 2D space
+		inversePV.transform(pos);
+		return new Vector2f(pos.x, pos.y);
 	}
 
 	// LIFECYCLE FUNCTIONS
