@@ -1,14 +1,18 @@
 package games.temporalstudio.timecapsule.level;
+import games.temporalstudio.temporalengine.component.Component;
+import games.temporalstudio.temporalengine.LifeCycleContext;
 
+public class Destroyable implements Component {
 
-public class Destroyable {
-    private boolean canBeDestroyed;
+    @Override
+    public void init(LifeCycleContext context) {}
 
-    public Destroyable(boolean canBeDestroyed) {
-        this.canBeDestroyed = canBeDestroyed;
-    }
+    @Override
+    public void start(LifeCycleContext context) {}
 
-    public boolean isDestroyable() {
-        return canBeDestroyed;
-    }
+    @Override
+    public void destroy(LifeCycleContext context) {}
+
+    @Override
+    public void update(LifeCycleContext context, float delta) {}
 }
