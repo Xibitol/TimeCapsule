@@ -49,8 +49,8 @@ public class View implements Component{
 
 	public Vector2f screenToWorldCoord(Vector2f screenCoord) {
 		Matrix4f inversePV = getProjection().mul(getView()).invert();
-		float mouseX = (2.0f * screenCoord.x) / Window.getWidth() - 1.0f;
-		float mouseY = 1.0f - (2.0f * screenCoord.y) / Window.getHeight();
+		float mouseX = (2.0f * screenCoord.x) / Window.getWindowSize().x - 1.0f;
+		float mouseY = 1.0f - (2.0f * screenCoord.y) / Window.getWindowSize().y;
 		Vector4f pos = new Vector4f(mouseX, mouseY, 0.0f, 1.0f); // z = 0 for 2D space
 		inversePV.transform(pos);
 		return new Vector2f(pos.x, pos.y);

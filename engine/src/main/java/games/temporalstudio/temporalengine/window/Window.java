@@ -61,6 +61,13 @@ public class Window implements WindowLifeCycle{
 	// GETTERS
 	public static boolean hasInstance(){ return instance != null; }
 
+	public static Vector2i getWindowSize() {
+		if(!hasInstance())
+			throw new IllegalStateException("No window instance available;");
+
+		return instance.getSize();
+	}
+
 	public Vector2i getSize(){
 		int[] width = new int[1];
 		int[] height = new int[1];

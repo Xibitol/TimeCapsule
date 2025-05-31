@@ -53,14 +53,14 @@ public class MouseActionner extends GameObject {
             MouseActionable mouseActionable = gameObject.getComponent(MouseActionable.class);
             mouseActionable.setMouseOver(true);
         });
-        this.collider2D.setOnSeparates((ctx, other) -> {
-            if (!(other instanceof GameObject gameObject)) { return; }
-            if (!(gameObject.hasComponent(MouseActionable.class))) { return; }
-            //Game.LOGGER.info("MouseActionner separates from " + gameObject.getName());
-
-            MouseActionable mouseActionable = gameObject.getComponent(MouseActionable.class);
-            mouseActionable.setMouseOver(false);
-        });
+//        this.collider2D.setOnSeparates((ctx, other) -> {
+//            if (!(other instanceof GameObject gameObject)) { return; }
+//            if (!(gameObject.hasComponent(MouseActionable.class))) { return; }
+//            //Game.LOGGER.info("MouseActionner separates from " + gameObject.getName());
+//
+//            MouseActionable mouseActionable = gameObject.getComponent(MouseActionable.class);
+//            mouseActionable.setMouseOver(false);
+//        });
     }
 
     @Override
