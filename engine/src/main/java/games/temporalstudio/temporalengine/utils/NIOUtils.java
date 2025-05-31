@@ -2,51 +2,57 @@ package games.temporalstudio.temporalengine.utils;
 
 import org.lwjgl.BufferUtils;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.SeekableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Optional;
+import java.nio.file.Paths;
 
 /**
  * @author Adnan FAIZE
  */
-public final class NIOUtils{
+public final class NIOUtils {
+	private static ByteBuffer resizeBuffer(ByteBuffer buffer, int newSize) {
+		ByteBuffer newBuffer = BufferUtils.createByteBuffer(newSize);
+		buffer.flip();
+		newBuffer.put(buffer);
+		return newBuffer;
+	}
 
-	// FUNCTIONS
 	/**
-     * Reads a resource from the classpath or file system into a ByteBuffer.
-     * @param resource The resource path.
-     * @param bufferSize The initial size of the ByteBuffer.
-     * @return A ByteBuffer containing the contents of the resource.
-     * @throws IOException If failed to read the resource (resource not found or
-	 * no permissions).
-     */
-    public static ByteBuffer getResourceAsByteBuffer(String resource)
-		throws IOException
-	{
-        ByteBuffer buffer;
+	 * Reads a resource from the classpath or file system into a ByteBuffer.
+	 * @param resource   The resource path (can be a classpath resource or file system path).
+	 * @param bufferSize The initial size of the ByteBuffer.
+	 * @return A ByteBuffer containing the contents of the resource.
+	 * @throws IOException If failed to read the resource (resource not found or no permissions).
+	 */
+	public static ByteBuffer getResourceAsByteBuffer(String resource, int bufferSize) throws IOException {
+		ByteBuffer buffer;
 
-		Optional<URL> opURL = Optional.ofNullable(
-			ClassLoader.getSystemResource(resource)
-		);
-		if(opURL.isEmpty())
-			throw new FileNotFoundException();
+		Path path = Paths.get(resource);
+		if (Files.isReadable(path)) {
+			try (SeekableByteChannel channel = Files.newByteChannel(path)) {
+				buffer = BufferUtils.createByteBuffer((int) channel.size() + 1);
+				while (channel.read(buffer) != -1);
+			}
+		} else {
+			try (InputStream res = ClassLoader.getSystemResourceAsStream(resource);
+				 ReadableByteChannel channel = Channels.newChannel(res)) {
+				buffer = BufferUtils.createByteBuffer(bufferSize);
 
-		try(SeekableByteChannel channel = Files.newByteChannel(
-			Path.of(opURL.get().getPath())
-		)){
-			buffer = BufferUtils.createByteBuffer((int) channel.size() + 1);
-
-			while(channel.read(buffer) != -1);
+				while (true) {
+					int bytesRead = channel.read(buffer);
+					if (bytesRead == -1) { break; }
+					if (buffer.remaining() == 0) { buffer = resizeBuffer(buffer, buffer.capacity() * 2); }
+				}
+			}
 		}
 
-		System.out.println(buffer);
-
-        buffer.flip();
-        return buffer;
-    }
+		buffer.flip();
+		return buffer;
+	}
 }

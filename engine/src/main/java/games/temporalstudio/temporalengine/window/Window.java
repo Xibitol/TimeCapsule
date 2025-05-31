@@ -82,13 +82,13 @@ public class Window implements WindowLifeCycle{
 	// FUNCTIONS
 	private ByteBuffer loadIconBuffer() throws IOException{
 		try{
-			return NIOUtils.getResourceAsByteBuffer(iconPath);
+			return NIOUtils.getResourceAsByteBuffer(iconPath, 512 * 512 * 4);
 		}catch (Exception e){
 			Game.LOGGER.warning(
 				"Failed to load icon at %s; Using default icon."
 					.formatted(iconPath)
 			);
-			return NIOUtils.getResourceAsByteBuffer(DEFAULT_ICON_PATH);
+			return NIOUtils.getResourceAsByteBuffer(DEFAULT_ICON_PATH, 512 * 512 * 4);
 		}
 	}
 	private void loadIcon(){
@@ -148,7 +148,7 @@ public class Window implements WindowLifeCycle{
 				"Unable to create the GLFW window;"
 			);
 
-		if(!glfwPlatformSupported(glfwGetPlatform())){
+		if(glfwPlatformSupported(glfwGetPlatform())){
 			loadIcon();
 		}else
 			game.getLogger().warning(
