@@ -44,8 +44,7 @@ public class MouseActionner extends GameObject {
 
         this.transform = new Transform(new Vector2f(0), new Vector2f(0.1f));
         this.render = new ColorRender(new Vector4f(1, 0, 1, 1f)); // TODO : This is a dummy render, it will not be used for rendering.
-        this.collider2D = new Collider2D(transform);
-        this.collider2D.setShape(new AABB(transform));
+        this.collider2D = new Collider2D(new AABB(transform));
 
         this.collider2D.setOnIntersects((ctx, other) -> {
             Game.LOGGER.info("MouseActionner intersects with " + other);
