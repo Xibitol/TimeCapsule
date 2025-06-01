@@ -2,7 +2,7 @@ package games.temporalstudio.temporalengine.window;
 
 import org.joml.Vector2i;
 
-public final class WindowInfo{
+public final class 	WindowInfo{
 
 	private final Window window;
 

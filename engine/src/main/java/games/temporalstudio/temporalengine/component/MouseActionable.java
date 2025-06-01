@@ -86,6 +86,30 @@ public class MouseActionable implements Component {
     private boolean hasAction(Consumer<LifeCycleContext>[] action, int index) { return action != null && action[index] != null; }
 
     @Override
+    public void init(LifeCycleContext context) {
+        if (!(context instanceof GameObject gameObject)){
+            Game.LOGGER.warning("MouseAction can only be used with GameObject context.");
+            destroy(context);
+            return;
+        }
+        if (!gameObject.hasComponent(Collider2D.class)) {
+            Game.LOGGER.warning("Trigger can only be used with GameObject context.");
+            destroy(context);
+        }
+    }
+
+    @Override
+    public void start(LifeCycleContext context) {
+        if (Stream.of(onEnterAction, onHoverAction, onExitAction, onClickDownAction, onClickAction, onClickUpAction)
+                .allMatch(Objects::isNull)) {
+            Game.LOGGER.warning("At least one action must be provided.");
+        }
+    }
+
+    @Override
+    public void destroy(LifeCycleContext context) { }
+
+    @Override
     public void update(LifeCycleContext context, float delta) {
         if (isMouseOver) {
             if (!wasMouseOver) {
@@ -115,29 +139,7 @@ public class MouseActionable implements Component {
                 }
             }
         }
-    }
 
-    @Override
-    public void init(LifeCycleContext context) {
-        if (!(context instanceof GameObject gameObject)){
-            Game.LOGGER.warning("MouseAction can only be used with GameObject context.");
-            destroy(context);
-            return;
-        }
-        if (!gameObject.hasComponent(Collider2D.class)) {
-            Game.LOGGER.warning("Trigger can only be used with GameObject context.");
-            destroy(context);
-        }
+        this.setMouseOver(false);
     }
-
-    @Override
-    public void start(LifeCycleContext context) {
-        if (Stream.of(onEnterAction, onHoverAction, onExitAction, onClickDownAction, onClickAction, onClickUpAction)
-                .allMatch(Objects::isNull)) {
-            Game.LOGGER.warning("At least one action must be provided.");
-        }
-    }
-
-    @Override
-    public void destroy(LifeCycleContext context) { }
 }

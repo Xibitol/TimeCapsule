@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import games.temporalstudio.temporalengine.component.*;
+import games.temporalstudio.temporalengine.window.Window;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
@@ -99,6 +100,7 @@ public class TestGame extends Game{
 		GameObject camera = new GameObject("camera");
 		camera.addComponent(new Transform());
 		camera.addComponent(new View(.1f));
+		MouseActionner mouseActionner = new MouseActionner(camera.getComponent(View.class), false);
 
 		GameObject button = createButton();
 		GameObject player = createPlayer(new int[]{
@@ -122,6 +124,7 @@ public class TestGame extends Game{
 		future.addGameObject(rock1);
 		future.addGameObject(ice);
 		future.addGameObject(spring);
+		future.addGameObject(mouseActionner);
 
 		return future;
 	}
