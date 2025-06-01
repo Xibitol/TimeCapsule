@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import games.temporalstudio.temporalengine.component.*;
 import games.temporalstudio.temporalengine.window.Window;
 import org.joml.Vector2f;
+import org.joml.Vector2i;
 import org.joml.Vector4f;
 
 import games.temporalstudio.temporalengine.Game;
@@ -18,6 +19,7 @@ import games.temporalstudio.temporalengine.physics.Transform;
 import games.temporalstudio.temporalengine.physics.shapes.AABB;
 import games.temporalstudio.temporalengine.rendering.component.ColorRender;
 import games.temporalstudio.temporalengine.rendering.component.Render;
+import games.temporalstudio.temporalengine.rendering.component.TextureRender;
 import games.temporalstudio.temporalengine.rendering.component.View;
 
 public class TestGame extends Game{
@@ -64,16 +66,19 @@ public class TestGame extends Game{
 		GameObject rulietta = new GameObject("Rulietta");
 		GameObject compulsiveMerger = new GameObject("Adrien");
 
+		GameObject wall = new GameObject("Wall");
+		GameObject wall1 = new GameObject("Wall1");
+		GameObject wall2 = new GameObject("Wall2");
+		GameObject wall3 = new GameObject("Wall3");
+
 		// Components
 		camera.addComponent(new Transform());
 		camera.addComponent(new View(.1f));
 		MouseActionner mouseActionner = new MouseActionner(camera.getComponent(View.class));
 
-		rulietta.addComponent(new Transform(
-		 	new Vector2f(1, 2), new Vector2f(.85f, .85f)
-		));
-		rulietta.addComponent(new ColorRender(
-			new Vector4f(1, 0, 1, 1)
+		rulietta.addComponent(new Transform(new Vector2f(1, 2)));
+		rulietta.addComponent(new TextureRender(
+			"rulietta", new Vector2i()
 		));
 
 		Vector4f lowPurple = new Vector4f(64f/255, 0, 1, 1);
@@ -85,12 +90,32 @@ public class TestGame extends Game{
 			lowPurple, lowPurple, lowPurple, highPurple
 		)));
 
+		wall.addComponent(new Transform(new Vector2f(3, 3)));
+		wall.addComponent(new TextureRender(
+			"terrain", new Vector2i()
+		));
+		wall1.addComponent(new Transform(new Vector2f(4, 3)));
+		wall1.addComponent(new TextureRender(
+			"terrain", new Vector2i(1, 0)
+		));
+		wall2.addComponent(new Transform(new Vector2f(5, 3)));
+		wall2.addComponent(new TextureRender(
+			"terrain", new Vector2i(1, 0)
+		));
+		wall3.addComponent(new Transform(new Vector2f(6, 3)));
+		wall3.addComponent(new TextureRender(
+			"terrain", new Vector2i(2, 0)
+		));
+
 		// Scene
 		past.addGameObject(camera);
 		past.addGameObject(player);
 		past.addGameObject(compulsiveMerger);
 		past.addGameObject(rulietta);
-		past.addGameObject(mouseActionner);
+		past.addGameObject(wall);
+		past.addGameObject(wall1);
+		past.addGameObject(wall2);
+		past.addGameObject(wall3);
 
 		return past;
 	}
@@ -102,7 +127,10 @@ public class TestGame extends Game{
 		camera.addComponent(new View(.1f));
 		MouseActionner mouseActionner = new MouseActionner(camera.getComponent(View.class), false);
 
-		GameObject button = createButton();
+		AtomicBoolean triggerActivated = new AtomicBoolean(false);
+		Trigger trigger = new Trigger(1 , triggerActivated::get);
+
+		GameObject button = createButton(trigger, triggerActivated);
 		GameObject player = createPlayer(new int[]{
 				GLFW_KEY_UP, GLFW_KEY_DOWN, GLFW_KEY_LEFT, GLFW_KEY_RIGHT,
 				GLFW_KEY_SLASH
@@ -111,7 +139,7 @@ public class TestGame extends Game{
 				GLFW_KEY_I, GLFW_KEY_K, GLFW_KEY_J, GLFW_KEY_L,
 				GLFW_KEY_SLASH
 		});
-		GameObject door = createDoor(button);
+		GameObject door = createDoor(button, trigger);
 		GameObject rock1 = createBreakableRock(GLFW_KEY_SLASH, future);
 		GameObject ice = createBouncyIce();
 		GameObject spring = createSpring();
@@ -129,14 +157,12 @@ public class TestGame extends Game{
 		return future;
 	}
 
-	private GameObject createButton(){
+	private GameObject createButton(Trigger trigger, AtomicBoolean triggerActivated){
 		GameObject button = new GameObject("button");
 
 		Render render = new ColorRender(new Vector4f(0, 1, 0, 1));
 		Transform transform = new Transform(new Vector2f(1f, .5f));
 
-		AtomicBoolean triggerActivated = new AtomicBoolean(false);
-		Trigger trigger = new Trigger(1 , triggerActivated::get);
 
 		Collider2D collider2D = new Collider2D(new AABB(transform));
 		collider2D.setOnIntersects(
@@ -219,7 +245,7 @@ public class TestGame extends Game{
 		return player;
 	}
 
-	private GameObject createDoor(GameObject button){
+	private GameObject createDoor(GameObject button, Trigger trigger){
 		GameObject door = new GameObject("door");
 
 		Render render = new ColorRender(new Vector4f(1, 0, 0, 1));
@@ -228,7 +254,6 @@ public class TestGame extends Game{
 		Collider2D collider2D = new Collider2D(new AABB(transform));
 		collider2D.setRigid(true);
 
-		Trigger trigger = button.getComponent(Trigger.class);
 		var ref = new Object() {
 			Triggerable triggerable = null;
 		};
