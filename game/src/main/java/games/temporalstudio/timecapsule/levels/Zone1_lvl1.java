@@ -1,11 +1,16 @@
 package games.temporalstudio.timecapsule.levels;
 
+import java.util.Set;
+
+import games.temporalstudio.temporalengine.Game;
 import games.temporalstudio.temporalengine.Scene;
 import games.temporalstudio.temporalengine.component.GameObject;
-import games.temporalstudio.temporalengine.Game;
-import games.temporalstudio.timecapsule.objects.*;
-
-import java.util.Set;
+import games.temporalstudio.timecapsule.objects.Exit;
+import games.temporalstudio.timecapsule.objects.Pickupable;
+import games.temporalstudio.timecapsule.objects.Player;
+import games.temporalstudio.timecapsule.objects.ThrowableBottle;
+import games.temporalstudio.timecapsule.objects.TimeObject;
+import games.temporalstudio.timecapsule.objects.Wall;
 
 public class Zone1_lvl1 implements TimeLevel{
 	private Scene pastScene;
@@ -21,20 +26,21 @@ public class Zone1_lvl1 implements TimeLevel{
 
 		ThrowableBottle throwableBottle = new ThrowableBottle("ThrowableBottle", pastPlayer);
 
+
 		pastTimeObjects = Set.of(
 				new Wall("Zone1_lvl1_Wall1", 1f, 6.0f),
 				new Wall("Zone1_lvl1_Wall2", 2f, 7.0f),
 				new Wall("Zone1_lvl1_Wall3", 3f, 8.0f),
 				new Wall("Zone1_lvl1_Wall4", 4f, 9.0f),
 				new Wall("Zone1_lvl1_Wall5", 5f, 10.0f),
+
+				
+
 				new Exit(
 						"Zone1_lvl1_CapsuleExit", 4.0f, 1.0f, pastPlayer.getGameObject(),
 						"Zone1_pastCapsule", game::changeLeftScene
 				),
-				new Exit(
-						"Zone1_lvl1_Exit", 3.0f, 3.0f, pastPlayer.getGameObject(),
-						"Zone1_lvl2_Past", game::changeLeftScene
-				),
+
 				new Pickupable("Bottle", 5.0f, 5.0f, pastPlayer, throwableBottle),
 				throwableBottle,
 				pastPlayer
@@ -50,7 +56,7 @@ public class Zone1_lvl1 implements TimeLevel{
 				new Wall("Zone1_lvl1_Wall5", 4f, 10.0f),
 				new Exit(
 						"Zone1_lvl1_Exit", 3.0f, 4.0f, futurPlayer.getGameObject(),
-						"Zone1_lvl2_Futur", game::changeRightScene
+						"NextLevel_Futur", game::changeRightScene
 				),
 				futurPlayer
 		);
