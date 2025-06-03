@@ -1,21 +1,24 @@
 package games.temporalstudio.timecapsule.levels;
 
-import java.util.HashSet;
 import java.util.Set;
+
+import org.joml.Vector2f;
+import org.joml.Vector4f;
 
 import games.temporalstudio.temporalengine.Game;
 import games.temporalstudio.temporalengine.Scene;
 import games.temporalstudio.temporalengine.component.GameObject;
+import games.temporalstudio.timecapsule.Entity.Enemy;
+import games.temporalstudio.timecapsule.Entity.Medusa;
+import games.temporalstudio.timecapsule.Entity.Player;
 import games.temporalstudio.timecapsule.objects.CapsuleReceiver;
 import games.temporalstudio.timecapsule.objects.CapsuleSender;
 import games.temporalstudio.timecapsule.objects.Exit;
 import games.temporalstudio.timecapsule.objects.Pickupable;
-import games.temporalstudio.timecapsule.objects.Player;
 import games.temporalstudio.timecapsule.objects.Seed;
 import games.temporalstudio.timecapsule.objects.ThrowableBottle;
 import games.temporalstudio.timecapsule.objects.TimeObject;
 import games.temporalstudio.timecapsule.objects.Wall;
-
 
 public class Zone1_lvl1 implements TimeLevel{
 	private Scene pastScene;
@@ -26,7 +29,7 @@ public class Zone1_lvl1 implements TimeLevel{
 	public Zone1_lvl1(
 			GameObject pastCamera, GameObject futurCamera,
 			Game game, Player pastPlayer, Player futurPlayer,
-			CapsuleReceiver zone1_futurCapsuleReceiver
+			CapsuleReceiver zone1_pastCapsuleReceiver
 	) {
 		this.pastScene = new Scene("Zone1_lvl1_Past");
 		this.futurScene = new Scene("Zone1_lvl1_Futur");
@@ -35,68 +38,65 @@ public class Zone1_lvl1 implements TimeLevel{
 
 		ThrowableBottle throwableBottle = new ThrowableBottle("ThrowableBottle", pastPlayer);
 
-		Set<TimeObject> pastWalls = new HashSet<>();
-		for (int x = 0; x < 16; x++) {
-			if (x != 8 && x != 9) {
-				pastWalls.add(new Wall("Past_BottomWall_" + x, x, 16));
-			}
-			pastWalls.add(new Wall("Past_TopWall_" + x, x, 0));
-		}
+		pastTimeObjects = Set.of(
+				new Enemy(new Vector4f(0,0.5f, 0.75f, 1),
+						new Vector2f[]{new Vector2f(-2,-4), new Vector2f(2,-2),new Vector2f(0,-5)},
+						pastScene),
+				new Wall("Zone1_lvl1_Wall1", 0f,5f),
+				new Wall("Zone1_lvl1_Wall2", 1f, 5f),
+				new Wall("Zone1_lvl1_Wall3", 2f, 5f),
 
-		for (int y = 1; y < 16; y++) {
-			pastWalls.add(new Wall("Past_LeftWall_" + y, 0, y));
-			if (y != 7 && y != 8) {
-				pastWalls.add(new Wall("Past_RightWall_" + y, 16, y));
-			}
-		}
+				new Wall("Zone1_lvl1_Wall5", -2f, 5f),
+				new Wall("Zone1_lvl1_Wall6", -3f, 5f),
+				new Wall("Zone1_lvl1_Wall7", -4f, 5f),
+				new Wall("Zone1_lvl1_Wall8", 3f, 5f),
 
 
-		Set<TimeObject> futurWalls = new HashSet<>();
-		for (int x = 0; x < 16; x++) {
-			futurWalls.add(new Wall("Futur_BottomWall_" + x, x, 16));
-			futurWalls.add(new Wall("Futur_TopWall_" + x, x, 0));
-		}
-		for (int y = 1; y < 16; y++) {
-			futurWalls.add(new Wall("Futur_LeftWall_" + y, 0, y));
-			if (y != 7 && y != 8) {
-				futurWalls.add(new Wall("Futur_RightWall_" + y, 16, y));
-			}
-		}
 
-		pastTimeObjects = new HashSet<>(pastWalls);
-		pastTimeObjects.addAll(Set.of(
 				new Exit(
-						"Zone1_lvl1_CapsuleExit", 8.0f, 0.0f, pastPlayer,
+						"Zone1_lvl1_CapsuleExit", -1f, 4.5f, pastPlayer,
 						"Zone1_pastCapsule", game::changeLeftScene
 				),
 				new Exit(
-						"Zone1_lvl1_Exit", 16.0f, 8.0f, pastPlayer,
+						"Zone1_lvl1_Exit", 3.0f, 3.0f, pastPlayer,
 						"Zone1_lvl2_Past", game::changeLeftScene
 				),
 				new Pickupable("Bottle", 5.0f, 5.0f, pastPlayer, throwableBottle),
 				throwableBottle,
+				new Medusa("pastMedusa",
+						new Vector2f(0.5f, 0.5f),
+						new Vector4f(0.25f,0,0.75f,1), pastPlayer),
 				pastPlayer
-		));
+		);
 
 		pastTimeObjects.forEach((timeObject) -> this.pastScene.addGameObject(timeObject.getGameObject()));
 
 		CapsuleSender sender = new CapsuleSender(
-                "capsuleSender", pastPlayer,
-                new Pickupable("seedPickup", 3, 3, pastPlayer, new Seed("seed", pastPlayer)),
-                zone1_futurCapsuleReceiver
-        );
-		pastPlayer.addToInventory(sender);
-		pastTimeObjects.add(sender);
+				"capsuleSender", futurPlayer,
+				new Pickupable("seedPickup", 3, 3, pastPlayer, new Seed("seed", pastPlayer)),
+				zone1_pastCapsuleReceiver
+		);
+		futurPlayer.addToInventory(sender);
 
-		futurTimeObjects = new HashSet<>(futurWalls);
-		futurTimeObjects.addAll(Set.of(
+		futurTimeObjects = Set.of(
+				new Enemy(new Vector4f(0,0.5f, 0.75f, 1),
+						new Vector2f[]{new Vector2f(-2,-4), new Vector2f(2,-2),new Vector2f(0,-5)},
+						futurScene),
+				new Wall("Zone1_lvl1_Wall1", 1f, 6.0f),
+				new Wall("Zone1_lvl1_Wall2", 2f, 7.0f),
+				new Wall("Zone1_lvl1_Wall3", 2f, 8.0f),
+				new Wall("Zone1_lvl1_Wall4", 4f, 9.0f),
+				new Wall("Zone1_lvl1_Wall5", 4f, 10.0f),
 				new Exit(
-						"Zone1_lvl1_Exit", 16.0f, 8.0f, futurPlayer,
+						"Zone1_lvl1_Exit", 3.0f, 4.0f, futurPlayer,
 						"Zone1_lvl2_Futur", game::changeRightScene
 				),
+				new Medusa("pastMedusa",
+						new Vector2f(0.5f, 0.5f),
+						new Vector4f(0.25f,0,0.75f,1), futurPlayer),
 				futurPlayer,
-				zone1_futurCapsuleReceiver
-		));
+                sender
+		);
 
 
 		futurTimeObjects.forEach((timeObject) -> this.futurScene.addGameObject(timeObject.getGameObject()));
