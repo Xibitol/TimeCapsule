@@ -16,7 +16,6 @@ import java.util.stream.IntStream;
 
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
-import org.joml.Vector2i;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
@@ -32,6 +31,7 @@ import games.temporalstudio.temporalengine.rendering.component.Render;
 import games.temporalstudio.temporalengine.rendering.component.TextureRender;
 import games.temporalstudio.temporalengine.rendering.component.View;
 import games.temporalstudio.temporalengine.rendering.texture.Texture;
+import games.temporalstudio.temporalengine.rendering.texture.Texture.Tile;
 
 public class RenderBatch implements RenderLifeCycle{
 
@@ -72,14 +72,16 @@ public class RenderBatch implements RenderLifeCycle{
 
 	private final Renderer renderer;
 	private final int size;
+	private final Layer layer;
 	private FloatBuffer vertices = null;
 	private IntBuffer indices = null;
 
 	private int vao, vbo, ebo;
 
-	public RenderBatch(Renderer renderer, int size){
+	public RenderBatch(Renderer renderer, int size, Layer layer){
 		this.renderer = renderer;
 		this.size = size;
+		this.layer = layer;
 	}
 
 	// FUNCTIONS
@@ -153,9 +155,10 @@ public class RenderBatch implements RenderLifeCycle{
 			}
 			case TextureRender tr -> {
 				texIndex = sampler.get(tr.getTexture());
-				texCoords = tr.getTexture().getCoords(
-					tr.getPosition(), tr.getScale()
-				);
+
+				Tile tile = tr.getTile();
+				if(tile != null)
+					texCoords = tr.getTexture().getCoords(tile);
 			}
 		}
 
@@ -285,7 +288,9 @@ public class RenderBatch implements RenderLifeCycle{
 		renderer.getShader().uploadMatrix4f(
 			PROJECTION_UNIFORM_NAME, view.getProjection(size[2], size[3])
 		);
-		renderer.getShader().uploadMatrix4f(VIEW_UNIFORM_NAME, view.getView());
+		renderer.getShader().uploadMatrix4f(VIEW_UNIFORM_NAME,
+			view.getView(size[2], size[3])
+		);
 
 		// Updates VBO
 		AtomicInteger aInt = new AtomicInteger(0);
@@ -295,6 +300,10 @@ public class RenderBatch implements RenderLifeCycle{
 		boolean shouldBeUpdated = scene.getGOsByComponent(
 				Render.class
 			).stream()
+				.filter(go -> {
+					Render r = go.getComponent(Render.class);
+					return r.getLayer().equals(layer);
+				})
 				.peek(go -> {
 					if(go.hasComponent(TextureRender.class)){
 						TextureRender tr = go.getComponent(

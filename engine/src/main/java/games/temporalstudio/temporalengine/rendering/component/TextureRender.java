@@ -3,29 +3,45 @@ package games.temporalstudio.temporalengine.rendering.component;
 import org.joml.Vector2i;
 
 import games.temporalstudio.temporalengine.LifeCycleContext;
+import games.temporalstudio.temporalengine.rendering.Layer;
 import games.temporalstudio.temporalengine.rendering.texture.Texture;
+import games.temporalstudio.temporalengine.rendering.texture.Texture.Tile;
 
-public final class TextureRender implements Render{
+public final class TextureRender extends Render{
 
 	private String textureName;
-	private Vector2i position;
-	private Vector2i scale;
+	private String tileName;
+	private Vector2i viewportScale;
 
-	public TextureRender(String textureName, Vector2i position){
+	public TextureRender(String textureName, String tileName, Layer layer,
+		Vector2i viewportScale
+	){
+		super(layer);
+
 		this.textureName = textureName;
-		this.position = position;
-		this.scale = new Vector2i(1, 1);
+		this.tileName = tileName;
+		this.viewportScale = viewportScale;
+	}
+	public TextureRender(String textureName, String tileName, Layer layer){
+		this(textureName, tileName, layer, null);
+	}
+	public TextureRender(String textureName, String tileName){
+		this(textureName, tileName, Render.DEFAULT_LAYER);
 	}
 
 	// GETTERS
 	public Texture getTexture(){ return Texture.get(textureName); }
-	public Vector2i getPosition(){ return position; }
-	public Vector2i getScale(){ return scale; }
+	public Tile getTile(){
+		Tile t = getTexture().getTile(tileName);
+		return viewportScale != null ?
+			new Tile(t.position(), viewportScale) : t;
+	}
 
 	// LIFECYCLE FUNCTIONS
 	@Override
 	public void init(LifeCycleContext context){
-		Texture.get(textureName).load();
+		if(!getTexture().wasLoaded())
+			getTexture().load();
 	}
 	@Override
 	public void start(LifeCycleContext context){}
