@@ -149,11 +149,13 @@
 	},
 	"left_door": {
 		"position": [11, 1],
-		"scale": [1, 4]
+		"scale": [1, 4],
+		"tiledID": 71
 	},
 	"right_door": {
 		"position": [12, 1],
-		"scale": [1, 4]
+		"scale": [1, 4],
+		"tiledID": 72
 	},
 	"face_door": {
 		"position": [13, 1],
