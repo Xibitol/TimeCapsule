@@ -64,6 +64,7 @@ public class TimeCapsule extends Game{
 
 		Map<String, Level> levels = Map.of(
 				"cave1", new Zone1_lvl1(pastCamera, futureCamera, this, pastPlayer, futurePlayer, pastMedusa, futureMedusa, zone1_pastCapsuleReceiver),
+				"cave1_2", new Zone2_lvl1(pastCamera, this, pastPlayer, pastMedusa),
 				"cave2", new Zone1_lvl2(pastCamera, futureCamera, this, pastPlayer, futurePlayer, pastMedusa, futureMedusa),
 				"cave3", new Zone1_lvl3(pastCamera, futureCamera, this, pastPlayer,futurePlayer, pastMedusa, futureMedusa),
 				"factory", new Zone2(pastCamera, futureCamera),
@@ -90,6 +91,9 @@ public class TimeCapsule extends Game{
 		Scene boat = ((TimeLevel)levels.get("boat")).getPastScene();
 		Scene finale = ((TimeLevel)levels.get("finale")).getPastScene();
 
+		Scene cave1_2 = ((SingleLevel)levels.get("cave1_2")).getScene();
+
+		cave1.addChild(cave1_2);
 		cave1.addChild(cave2);
 		cave1.addChild(cave3);
 		cave2.addChild(factory);
