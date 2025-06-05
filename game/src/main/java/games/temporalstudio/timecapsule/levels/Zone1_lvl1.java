@@ -30,14 +30,62 @@ public class Zone1_lvl1 implements TimeLevel{
 		this.futurScene.addGameObject(futurCamera);
 		this.pastScene.addGameObject(pastCamera);
 
+		pastPlayer.getTransform().setPosition(new Vector2f(16, 5));
+		futurPlayer.getTransform().setPosition(new Vector2f(16, 5));
+
 		commons = Set.of(
-				new Wall(new Vector2f(0, 13), new Vector2f(32, 13)), // Bottom wall
+				new Wall(new Vector2f(0, 3), new Vector2f(32, 3)), // Bottom wall
 				new Wall(new Vector2f(0.3f, 0), new Vector2f(0.3f, 32)), // Left wall
 				new Wall(new Vector2f(31.7f, 0), new Vector2f(31.7f, 32)), // Right wall
 				new Wall(new Vector2f(0, 30), new Vector2f(7.8f, 30)), // Top wall part 1
-				new Wall(new Vector2f(9.2f, 30), new Vector2f(32, 30))  // Top wall part 2
+				new Wall(new Vector2f(9.2f, 30), new Vector2f(32, 30)),  // Top wall part 2
 
-				// TODO : add water collisions
+				// Water
+				new Wall(new Vector2f(0, 17.8f), new Vector2f(1.2f, 17.8f)),
+				new Wall(new Vector2f(1.2f, 17.8f), new Vector2f(1.2f, 18.8f)),
+				new Wall(new Vector2f(1.2f, 18.8f), new Vector2f(5.2f, 18.8f)),
+				new Wall(new Vector2f(5.2f, 18.8f), new Vector2f(5.2f, 19.8f)),
+
+				new Wall(new Vector2f(5.2f, 19.8f), new Vector2f(6.2f, 19.8f)),
+
+				new Wall(new Vector2f(8.2f, 19.8f), new Vector2f(9.8f, 19.8f)),
+
+				new Wall(new Vector2f(9.8f, 19.8f), new Vector2f(9.8f, 18.8f)),
+				new Wall(new Vector2f(9.8f, 18.8f), new Vector2f(11.8f, 18.8f)),
+				new Wall(new Vector2f(11.8f, 18.8f), new Vector2f(11.8f, 17.8f)),
+				new Wall(new Vector2f(11.8f, 17.8f), new Vector2f(12.8f, 17.8f)),
+				new Wall(new Vector2f(12.8f, 17.8f), new Vector2f(12.8f, 14.8f)),
+				new Wall(new Vector2f(8.8f, 15.2f), new Vector2f(14.8f, 15.2f)),
+				new Wall(new Vector2f(12.8f, 15.2f), new Vector2f(12.8f, 16.8f)),
+				new Wall(new Vector2f(15.2f, 15.8f), new Vector2f(15.2f, 18.2f)),
+				new Wall(new Vector2f(14.2f, 15.2f), new Vector2f(14.2f, 26.8f)),
+				new Wall(new Vector2f(14.2f, 16.8f), new Vector2f(14.8f, 16.8f)),
+				new Wall(new Vector2f(15.5f, 26.8f), new Vector2f(15.6f, 13.8f)),
+
+				// Approx collisions
+
+				new Wall(new Vector2f(16.8f, 15.8f), new Vector2f(16.8f, 26.8f)),
+
+				new Wall(new Vector2f(16.8f, 15.8f), new Vector2f(18.8f, 15.8f)),
+				new Wall(new Vector2f(18.8f, 16.8f), new Vector2f(18.8f, 14.8f)),
+
+				new Wall(new Vector2f(18.8f, 14.8f), new Vector2f(26.8f, 14.8f)),
+				new Wall(new Vector2f(23.8f, 14.8f), new Vector2f(23.8f, 12.8f)),
+				new Wall(new Vector2f(23.8f, 12.8f), new Vector2f(28.8f, 12.8f)),
+				new Wall(new Vector2f(26.8f, 12.8f), new Vector2f(26.8f, 20.8f)),
+				new Wall(new Vector2f(26.8f, 18.8f), new Vector2f(32, 18.8f)),
+
+				new Wall(new Vector2f(5.2f, 21.2f), new Vector2f(5.2f, 27.2f)),
+				new Wall(new Vector2f(5.2f, 21.2f), new Vector2f(6.2f, 21.2f)),
+
+				new Wall(new Vector2f(8.2f, 21.2f), new Vector2f(8.2f, 21.8f)),
+				new Wall(new Vector2f(8.8f, 21.2f), new Vector2f(8.8f, 22.2f)),
+				new Wall(new Vector2f(8.8f, 22.2f), new Vector2f(9.6f, 22.2f)),
+				new Wall(new Vector2f(9.6f, 22.2f), new Vector2f(9.6f, 27.2f)),
+
+				new Wall(new Vector2f(0, 27.2f), new Vector2f(5.2f, 27.2f)),
+				new Wall(new Vector2f(9.6f, 27.2f), new Vector2f(13.8f, 27.2f)),
+				new Wall(new Vector2f(16.8f, 27.2f), new Vector2f(32, 27.2f))
 		);
 
 		commons.forEach((timeObject) -> this.pastScene.addGameObject(timeObject.getGameObject()));
@@ -50,16 +98,16 @@ public class Zone1_lvl1 implements TimeLevel{
 		ThrowableBottle throwableBottle = new ThrowableBottle("ThrowableBottle", pastPlayer);
 
 		pastTimeObjects = Set.of(
+				new Wall(new Vector2f(6.2f, 21.2f), new Vector2f(8.2f, 21.2f)), // Block root passage
+				new Wall(new Vector2f(6.2f, 19.8f), new Vector2f(8.2f, 19.8f)), // Block root passage
 				new Exit(
-						"Zone1_lvl1_CapsuleExit", 4.0f, 1.0f, pastPlayer,pastMedusa ,
-						"Zone1_pastCapsule", game::changeLeftScene, new Vector2f(7.0f, 28.0f)
+						"Zone1_lvl1_Exit", 8, 30, pastPlayer,pastMedusa ,
+						"Zone1_lvl2_Past", game::changeLeftScene, new Vector2f(1, 1)
 				),
-//				new Wall(new Vector2f(1, 5), new Vector2f(3, 8)),
-//
-//				new Exit(
-//						"Zone1_lvl1_Exit", 3.0f, 3.0f, pastPlayer, pastMedusa,
-//						"Zone1_lvl2_Past", game::changeLeftScene, new Vector2f(1.0f, 1.0f)
-//				),
+				new Exit(
+						"Zone2_lvl1_Past", 31, 14, pastPlayer, pastMedusa,
+						"Zone2_lvl1_Past", game::changeLeftScene, new Vector2f(7.0f, 28.0f)
+				),
 				new Pickupable("Bottle", 5.0f, 5.0f, pastPlayer, throwableBottle),
 				throwableBottle,
 				new Medusa("pastMedusa",
@@ -82,13 +130,10 @@ public class Zone1_lvl1 implements TimeLevel{
 		futurPlayer.addToInventory(sender);
 
 		futurTimeObjects = Set.of(
-				new Enemy(new Vector4f(0,0.5f, 0.75f, 1),
-						new Vector2f(),
-						new Vector2f[]{new Vector2f(-2,-4), new Vector2f(2,-2),new Vector2f(0,-5)},
-						futurScene),
-				new Wall(new Vector2f(1, 5), new Vector2f(5, 8)),
+				new Wall(new Vector2f(14.2f, 15.8f), new Vector2f(16.8f, 15.8f)), // Block main passage
+				new Wall(new Vector2f(14.2f, 26.8f), new Vector2f(16.8f, 26.8f)), // Block main passage
 				new Exit(
-						"Zone1_lvl1_Exit", 3.0f, 4.0f, futurPlayer,futurMedusa ,
+						"Zone1_lvl1_Exit", 8, 30, futurPlayer,futurMedusa ,
 						"Zone1_lvl2_Futur", game::changeRightScene, new Vector2f(1.0f, 1.0f)
 				),
 				new Medusa("pastMedusa",
