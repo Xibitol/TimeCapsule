@@ -113,8 +113,8 @@ public class Zone1_lvl1 implements TimeLevel{
 						new Vector2f(0.5f, 0.5f),
 						new Vector4f(0.25f,0,0.75f,1), pastPlayer),
 				pastPlayer,
-				new SeedEmplacement("Zone1_lvl1_seedEmplacement",7.0f,7,pastPlayer, pastScene,futurScene)
-
+				new SeedEmplacement("Zone1_lvl1_seedEmplacement",7.0f,17,pastPlayer, pastScene,futurScene),
+				zone1_pastCapsuleReceiver
 		);
 
 		pastTimeObjects.forEach((timeObject) -> this.pastScene.addGameObject(timeObject.getGameObject()));
@@ -125,7 +125,7 @@ public class Zone1_lvl1 implements TimeLevel{
 
 		CapsuleSender sender = new CapsuleSender(
 				"capsuleSender", futurPlayer,
-				new Pickupable("seedPickup", 9, 	9, pastPlayer, new Seed("seed", pastPlayer)),
+				new Pickupable("seedPickup", 9, 	9 , pastPlayer, new Seed("seed", pastPlayer)),
 				zone1_pastCapsuleReceiver
 		);
 		futurPlayer.addToInventory(sender);

@@ -43,11 +43,10 @@ public class SeedEmplacement implements TimeObject{
                         futurScene.addGameObject(futurTree.getGameObject());
                         ArrayList<CardinalDirections> directionsTest = new ArrayList<CardinalDirections>();
                         directionsTest.add(CardinalDirections.NORTH);
-
+                        directionsTest.add(CardinalDirections.NORTH);
 
                         new Roots("_roots", x, y, directionsTest, futurScene);
 
-                        pastScene.removeGameObject(this.gameObject);
                     }
                 }
             }
