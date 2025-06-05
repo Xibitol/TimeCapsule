@@ -39,7 +39,7 @@ public class Enemy extends Entity{
             }
             GameObject gameCollider=new GameObject("collider");
             Transform transform1=new Transform(coords[i]);
-            Render render1=new ColorRender(new Vector4f(0.25f,0.5f,0.25f, 0.5f));
+            Render render1=new ColorRender(new Vector4f(0.25f,0.5f,0.25f, 0.0f));
             Collider2D collider2=new Collider2D((new AABB(transform1)));
             collider2.setOnIntersects((context, other) -> {
                 {
