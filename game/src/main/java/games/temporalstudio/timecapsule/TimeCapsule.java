@@ -7,6 +7,9 @@ import games.temporalstudio.temporalengine.Scene;
 import games.temporalstudio.temporalengine.component.Follow;
 import games.temporalstudio.temporalengine.component.GameObject;
 import games.temporalstudio.temporalengine.physics.Transform;
+import games.temporalstudio.temporalengine.rendering.Layer;
+import games.temporalstudio.temporalengine.rendering.component.SpriteRender;
+import games.temporalstudio.temporalengine.rendering.component.TileRender;
 import games.temporalstudio.temporalengine.rendering.component.View;
 import games.temporalstudio.timecapsule.Entity.Medusa;
 import games.temporalstudio.timecapsule.Entity.Player;
@@ -72,7 +75,7 @@ public class TimeCapsule extends Game{
 				"finale", new Zone4(pastCamera, futureCamera)
 		);
 
-		System.out.println(levels);
+		zone1_pastCapsuleReceiver.setScene(((TimeLevel)levels.get("cave2")).getPastScene());
 
 		setFirstLeftScene(createPastScenes(levels));
 		setFirstRightScene(createFutureScenes(levels));
