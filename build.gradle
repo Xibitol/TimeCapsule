@@ -74,7 +74,7 @@ project(":game"){
 	apply plugin: "application"
 
 	def appName = "timecapsule"
-	version = "0.0.0"
+	version = "1.0.0-b.1"
 
 	base{
 		archivesName = appName
