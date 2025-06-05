@@ -58,7 +58,7 @@ public class TimeCapsule extends Game{
 				new Vector2f(0.5f, 0.5f),
 				new Vector4f(0.25f,0,0.75f,1), futurePlayer);
 
-		CapsuleReceiver zone1_pastCapsuleReceiver = new CapsuleReceiver("zone1_pastCapsuleReceiver", 3.0f, 3.0f);
+		CapsuleReceiver zone1_pastCapsuleReceiver = new CapsuleReceiver("zone1_pastCapsuleReceiver", 10, 10);
 
 		Map<String, Level> levels = Map.of(
 				"cave1", new Zone1_lvl1(pastCamera, futureCamera, this, pastPlayer, futurePlayer, pastMedusa, futureMedusa, zone1_pastCapsuleReceiver),
@@ -69,7 +69,7 @@ public class TimeCapsule extends Game{
 				"finale", new Zone4(pastCamera, futureCamera)
 		);
 
-		zone1_pastCapsuleReceiver.setScene(((TimeLevel)levels.get("cave2")).getPastScene());
+		zone1_pastCapsuleReceiver.setScene(((TimeLevel)levels.get("cave1")).getPastScene());
 
 		setFirstLeftScene(createPastScenes(levels));
 		setFirstRightScene(createFutureScenes(levels));
