@@ -7,9 +7,6 @@ import games.temporalstudio.temporalengine.Scene;
 import games.temporalstudio.temporalengine.component.Follow;
 import games.temporalstudio.temporalengine.component.GameObject;
 import games.temporalstudio.temporalengine.physics.Transform;
-import games.temporalstudio.temporalengine.rendering.Layer;
-import games.temporalstudio.temporalengine.rendering.component.SpriteRender;
-import games.temporalstudio.temporalengine.rendering.component.TileRender;
 import games.temporalstudio.temporalengine.rendering.component.View;
 import games.temporalstudio.timecapsule.Entity.Medusa;
 import games.temporalstudio.timecapsule.Entity.Player;
@@ -17,8 +14,6 @@ import games.temporalstudio.timecapsule.levels.*;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 import games.temporalstudio.timecapsule.objects.CapsuleReceiver;
-import games.temporalstudio.timecapsule.objects.Chest;
-import games.temporalstudio.timecapsule.objects.CompleteKey;
 
 import java.util.Map;
 
@@ -45,13 +40,13 @@ public class TimeCapsule extends Game{
 
 		Player pastPlayer= new Player(1,1,
 			new int[]{GLFW_KEY_W, GLFW_KEY_A, GLFW_KEY_S, GLFW_KEY_D, GLFW_KEY_SPACE, GLFW_KEY_Q, GLFW_KEY_E},
-			new Vector4f(0,0,1,1)
+			new Vector4f(0,0,1,1), "jeanne"
 		);
 		pastCamera.addComponent(new Follow(pastPlayer.getGameObject()));
 
 		Player futurePlayer = new Player(1, 1,
 			new int[]{GLFW_KEY_UP, GLFW_KEY_LEFT, GLFW_KEY_DOWN, GLFW_KEY_RIGHT, GLFW_KEY_RIGHT_CONTROL, GLFW_KEY_EQUAL, GLFW_KEY_RIGHT_SHIFT},
-			new Vector4f(0,0,1,1)
+			new Vector4f(0,0,1,1), "merlin"
 		);
 		futureCamera.addComponent(new Follow(futurePlayer.getGameObject()));
 
@@ -68,7 +63,7 @@ public class TimeCapsule extends Game{
 		Map<String, Level> levels = Map.of(
 				"cave1", new Zone1_lvl1(pastCamera, futureCamera, this, pastPlayer, futurePlayer, pastMedusa, futureMedusa, zone1_pastCapsuleReceiver),
 				"cave1_2", new Zone2_lvl1(pastCamera, this, pastPlayer, pastMedusa),
-				"cave2", new Zone1_lvl2(pastCamera, futureCamera, this, pastPlayer, futurePlayer, pastMedusa, futureMedusa),
+				"cave2", new Zone1_lvl2(pastCamera, futureCamera, this, pastPlayer, futurePlayer, pastMedusa, futureMedusa, zone1_pastCapsuleReceiver),
 				"cave3", new Zone1_lvl3(pastCamera, futureCamera, this, pastPlayer,futurePlayer, pastMedusa, futureMedusa),
 				"factory", new Zone2(pastCamera, futureCamera),
 				"boat", new Zone3(pastCamera, futureCamera),

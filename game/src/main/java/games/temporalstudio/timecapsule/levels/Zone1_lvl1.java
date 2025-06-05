@@ -4,13 +4,11 @@ import games.temporalstudio.temporalengine.Scene;
 import games.temporalstudio.temporalengine.component.GameObject;
 import games.temporalstudio.temporalengine.Game;
 import games.temporalstudio.temporalengine.rendering.component.MapRender;
-import games.temporalstudio.timecapsule.Entity.Enemy;
 import games.temporalstudio.timecapsule.Entity.Medusa;
 import games.temporalstudio.timecapsule.Entity.Player;
 import games.temporalstudio.timecapsule.objects.*;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.Set;
 
