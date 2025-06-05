@@ -105,7 +105,7 @@ public class Zone1_lvl1 implements TimeLevel{
 				),
 				new Exit(
 						"Zone2_lvl1_Past", 31, 16, pastPlayer, pastMedusa,
-						"Zone2_lvl1_Past", game::changeLeftScene, new Vector2f(7.0f, 28.0f)
+						"Zone1_lvl2_Past", game::changeLeftScene, new Vector2f(7.0f, 28.0f)
 				),
 				new Pickupable("Bottle", 5.0f, 5.0f, pastPlayer, throwableBottle),
 				throwableBottle,
